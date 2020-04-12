@@ -16,14 +16,27 @@ public class Controleur {
     }
 
     void jump() {
-        //jeu.jump();
+        jeu.jump();
     }
 
     void left() {
-        //jeu.left();
+        jeu.left();
     }
 
     void right() {
-        //jeu.right();
+        jeu.right();
     }
+
+    void endAcc() {
+        jeu.endAcc();
+    }
+
+    void endVit() {
+        jeu.endVit();
+    }
+
+    void switchDebug() {
+        jeu.switchDebug();
+    }
+
 }

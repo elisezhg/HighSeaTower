@@ -1,7 +1,7 @@
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
-public abstract class Plateforme extends Entity{
+public class Plateforme extends Entity{
 
     public Plateforme(int i) {
         this.hauteur = 10;

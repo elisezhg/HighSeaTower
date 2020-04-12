@@ -1,12 +1,9 @@
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 
 public class PlateformeSolide extends Plateforme {
     public PlateformeSolide(int i) {
         super(i);
-
-    }
-
-    public void draw(GraphicsContext context, double fenetreX, double fenetreY) {
-
+        this.color = Color.rgb(184, 15, 36);
     }
 }
