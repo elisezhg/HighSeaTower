@@ -97,11 +97,16 @@ public class Meduse extends Entity {
          * - La vitesse va vers le bas (le personnage est en train de tomber,
          * pas en train de sauter)
          */
-        if (intersects(other) && Math.abs(this.posY + hauteur - other.posY) < 10 && vy > 0) {
+        if (intersects(other) && other instanceof PlateformeSolide) {
+            pushOut(other);
+            this.vy = 0;
+            this.parterre = true;
+
+        } else if (intersects(other) && Math.abs(this.posY + hauteur - other.posY) < 10 && vy > 0) {
 
             pushOut(other);
 
-            if (other instanceof PlateformeSimple || other instanceof PlateformeSolide) {
+            if (other instanceof PlateformeSimple) {
                 this.vy = 0;
 
             } else if (other instanceof PlateformeRebondissante) {
@@ -119,19 +124,10 @@ public class Meduse extends Entity {
     }
 
     public boolean intersects(Plateforme other) {
-        if (other instanceof PlateformeSolide) {
-            //TODO
-            /*return !( // Un des carrés est à gauche de l’autre
-                    posX + largeur < other.posX || other.posX + other.largeur < this.posX
-                      // Un des carrés est en haut de l’autre
-                    || posY + hauteur < other.posY || other.posY + other.hauteur < this.posY);*/
-                    return true;
-        } else {
-            return !( // Un des carrés est à gauche de l’autre
-                    posX + largeur < other.posX || other.posX + other.largeur < this.posX
-                     // Un des carrés est en haut de l’autre
-                    || posY + hauteur < other.posY || other.posY + other.hauteur < this.posY);
-        }
+        return !( // Un des carrés est à gauche de l’autre
+                posX + largeur < other.posX || other.posX + other.largeur < this.posX
+                 // Un des carrés est en haut de l’autre
+                || posY + hauteur < other.posY || other.posY + other.hauteur < this.posY);
     }
 
     /**
@@ -139,7 +135,15 @@ public class Meduse extends Entity {
      * plateforme)
      */
     public void pushOut(Plateforme other) {
-        double deltaY = this.posY + this.hauteur - other.posY;
+
+        double deltaY = 0;
+        if (other instanceof PlateformeSolide) {
+            // TODO: pushOut dans toutes les directions pour plateformes solides
+            //deltaY =
+        } else {
+            deltaY = this.posY + this.hauteur - other.posY;
+        }
+
         this.posY -= deltaY;
     }
 

@@ -29,9 +29,10 @@ public class Jeu {
         //TODO: proba
         // tests
         for (int i = 0; i < 5; i++) {
-            plateformes.add(new PlateformeSimple(i * 3));
-            plateformes.add(new PlateformeRebondissante(i * 3 + 1));
-            plateformes.add(new PlateformeAccelerante(i * 3 + 2));
+            plateformes.add(new PlateformeSimple(i * 4));
+            plateformes.add(new PlateformeRebondissante(i * 4 + 1));
+            plateformes.add(new PlateformeAccelerante(i * 4 + 2));
+            plateformes.add(new PlateformeSolide(i * 4 + 3));
         }
     }
 
@@ -80,9 +81,11 @@ public class Jeu {
         meduse.update(dt);
 
         if (meduse.getPosY() - fenetreY < HighSeaTower.HEIGHT * 0.25) {
+            //TODO
             //fenetreY = ;
             System.out.println("dépasse les 75%!");
         } else if (meduse.getPosY() - fenetreY > HighSeaTower.HEIGHT) {
+            //TODO
             System.out.println("perdu :(");
         }
 
