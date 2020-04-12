@@ -1,7 +1,9 @@
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 
 public class PlateformeRebondissante extends Plateforme {
-    public void draw(GraphicsContext context, double fenetreX, double fenetreY) {
-
+    public PlateformeRebondissante(int i) {
+        super(i);
+        this.color = Color.LIGHTGREEN;
     }
 }

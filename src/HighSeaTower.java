@@ -6,6 +6,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 
@@ -34,18 +35,26 @@ public class HighSeaTower extends Application {
                 case SPACE:
                 case UP:
                     controleur.jump();
-                    System.out.println("jump");
                     break;
                 case LEFT:
                     controleur.left();
-                    System.out.println("left");
                     break;
                 case RIGHT:
                     controleur.right();
-                    System.out.println("right");
                     break;
                 case T:
-                    System.out.println("debug mode");
+                    controleur.switchDebug();
+            }
+        });
+
+        scene.setOnKeyReleased((e) -> {
+            switch (e.getCode()) {
+                case LEFT:
+                case RIGHT:
+                    controleur.endAcc();
+                    break;
+                case SPACE:
+                    controleur.endVit();
             }
         });
 
@@ -64,6 +73,9 @@ public class HighSeaTower extends Application {
                 double dt = (now - lastTime) * 1e-9;
 
                 context.clearRect(0, 0, WIDTH, HEIGHT);
+                context.setFill(Color.rgb(0, 8, 144));
+                context.fillRect(0, 0, WIDTH, HEIGHT);
+
                 controleur.update(dt);
                 controleur.draw(context);
 

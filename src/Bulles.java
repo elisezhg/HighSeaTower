@@ -2,6 +2,9 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 public class Bulles extends Entity {
+
+    // TODO
+
     private Color color = Color.rgb(0, 0, 255, 0.4);
     private double[] baseX = new double[3];
 
