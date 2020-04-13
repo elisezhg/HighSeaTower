@@ -85,18 +85,11 @@ public class Meduse extends Entity {
         }
     }
 
+
+    /**
+     * @param other la plateforme
+     */
     public void testCollision(Plateforme other) {
-        /**
-         * La collision avec une plateforme a lieu seulement si :
-         *
-         * - Il y a une intersection entre la plateforme et le personnage
-         *
-         * - La collision a lieu entre la plateforme et le *bas du personnage*
-         * seulement
-         *
-         * - La vitesse va vers le bas (le personnage est en train de tomber,
-         * pas en train de sauter)
-         */
         if (intersects(other) && other instanceof PlateformeSolide) {
             pushOut(other);
             this.vy = 0;
@@ -131,20 +124,28 @@ public class Meduse extends Entity {
     }
 
     /**
-     * Repousse le personnage vers le haut (sans déplacer la
+     * Repousse le personnage vers toutes les directions (sans déplacer la
      * plateforme)
      */
     public void pushOut(Plateforme other) {
 
-        double deltaY = 0;
+        double deltaY ;
+        double deltaX ;
         if (other instanceof PlateformeSolide) {
             // TODO: pushOut dans toutes les directions pour plateformes solides
-            //deltaY =
+            deltaX = posX - Math.max(
+                    other.getPosX() - other.largeur / 2,
+                    Math.min(posX, other.getPosX() + other.largeur / 2));
+            deltaY = posY - Math.max(
+                    other.getPosY() - other.hauteur / 2,
+                    Math.min(posY, other.getPosY() + other.largeur / 2));
         } else {
             deltaY = this.posY + this.hauteur - other.posY;
+            deltaX = 0;
         }
 
         this.posY -= deltaY;
+        this.posX -= deltaX;
     }
 
     public void setParterre(boolean parterre) {
