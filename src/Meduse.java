@@ -34,10 +34,7 @@ public class Meduse extends Entity {
         this.largeur = 50;
         this.hauteur = 50;
         this.posX = (HighSeaTower.WIDTH - largeur) / 2;
-        this.posY = HighSeaTower.HEIGHT + hauteur;
-        this.vx = 0;
-        this.vy = 0;
-        this.ax = 0;
+        this.posY = HighSeaTower.HEIGHT - hauteur;
         this.ay = 1200; //gravité: 1200px/s^2 vers le bas
     }
 

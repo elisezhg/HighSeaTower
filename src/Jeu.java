@@ -1,15 +1,19 @@
 import java.util.ArrayList;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Control;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 public class Jeu {
+
+    private Controleur controleur;
 
     // Origine de la fenêtre
     private double fenetreX = 0, fenetreY = 0;
 
     private double vitesse = 50;   // 50px/s
     private double acceleration = 2;  // 2px/s^2
+    private double tempsTotal = 0;
 
     public static boolean debugMode = false;
 
@@ -22,8 +26,13 @@ public class Jeu {
     // Entités dans le jeu
     private Meduse meduse;
     private ArrayList<Plateforme> plateformes = new ArrayList<>(); //TODO: trouver data structure adaptée
+    private ArrayList<ArrayList<Bulle>> bulles;
 
-    public Jeu() {
+    public Jeu(Controleur controleur) {
+        Jeu.debut = false;
+        Jeu.vitesseAcceleree = false;
+        this.controleur = controleur;
+
         meduse = new Meduse();
 
         //TODO: proba
@@ -32,7 +41,21 @@ public class Jeu {
             plateformes.add(new PlateformeSimple(i * 4));
             plateformes.add(new PlateformeRebondissante(i * 4 + 1));
             plateformes.add(new PlateformeAccelerante(i * 4 + 2));
-            plateformes.add(new PlateformeSolide(i * 4 + 3));
+            plateformes.add(new PlateformeSimple(i * 4 + 3));
+        }
+
+        genererBulles();
+    }
+
+    public void genererBulles() {
+        bulles = new ArrayList<>();
+
+        for (int i = 0; i < 3; i++) {
+            bulles.add(new ArrayList<>());
+            double baseX = Math.random() * HighSeaTower.WIDTH; // entre 0 et width
+            for (int j = 0; j < 5; j++) {
+                bulles.get(i).add(new Bulle(baseX, fenetreY));
+            }
         }
     }
 
@@ -78,15 +101,16 @@ public class Jeu {
             }
         }
 
-        meduse.update(dt);
 
+        if (debut) meduse.update(dt);
+
+        // dépasse les 75%
         if (meduse.getPosY() - fenetreY < HighSeaTower.HEIGHT * 0.25) {
-            //TODO
-            //fenetreY = ;
-            System.out.println("dépasse les 75%!");
+            fenetreY  -= HighSeaTower.HEIGHT * 0.25 - meduse.getPosY() + fenetreY;
+
+        // perdu
         } else if (meduse.getPosY() - fenetreY > HighSeaTower.HEIGHT) {
-            //TODO
-            System.out.println("perdu :(");
+            controleur.nvPartie();
         }
 
         if (fenetreY != 0) {
@@ -97,6 +121,22 @@ public class Jeu {
             pf.update(dt);
             meduse.testCollision(pf);
         }
+
+        if (debut) {
+            tempsTotal += dt;
+
+            if (tempsTotal >= 3) {
+                tempsTotal = 0;
+                genererBulles();
+            }
+
+            // update bulles
+            for (ArrayList<Bulle> grpBulles : bulles) {
+                for (Bulle bulle : grpBulles) {
+                    bulle.update(dt);
+                }
+            }
+        }
     }
 
     public void draw(GraphicsContext context) {
@@ -106,9 +146,13 @@ public class Jeu {
             pf.draw(context, fenetreX, fenetreY);
         }
 
+        for (ArrayList<Bulle> grpBulles : bulles) {
+            for (Bulle bulle : grpBulles) {
+                bulle.draw(context, fenetreX, fenetreY);
+            }
+        }
+
         context.setFill(Color.WHITE);
-        // context.fillText("Origine de la fenêtre: (" + fenetreX + ", " + fenetreY + ")", 5, 50);
-        // context.fillText("Vitesse: (" + vitesse + ")", 5, 20);
 
         if (debugMode) {
             context.fillText("Position = (" + (int) meduse.getPosX() + ", " + (int) (-meduse.getPosY() + HighSeaTower.HEIGHT) + ")", 5, 20);
