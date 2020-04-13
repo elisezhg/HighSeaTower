@@ -4,7 +4,7 @@ public class Controleur {
     private Jeu jeu;
 
     public Controleur() {
-        this.jeu = new Jeu();
+        this.jeu = new Jeu(this);
     }
 
     void draw(GraphicsContext context) {
@@ -37,6 +37,10 @@ public class Controleur {
 
     void switchDebug() {
         jeu.switchDebug();
+    }
+
+    void nvPartie() {
+        this.jeu = new Jeu(this);
     }
 
 }
