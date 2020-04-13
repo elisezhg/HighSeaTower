@@ -44,6 +44,9 @@ public class HighSeaTower extends Application {
                     break;
                 case T:
                     controleur.switchDebug();
+                    break;
+                case R:
+                    controleur.nvPartie();
             }
         });
 
@@ -53,8 +56,6 @@ public class HighSeaTower extends Application {
                 case RIGHT:
                     controleur.endAcc();
                     break;
-                case SPACE:
-                    controleur.endVit();
             }
         });
 

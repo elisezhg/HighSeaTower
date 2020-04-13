@@ -3,6 +3,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Control;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.TextAlignment;
 
 public class Jeu {
 
@@ -25,8 +26,9 @@ public class Jeu {
 
     // Entités dans le jeu
     private Meduse meduse;
-    private ArrayList<Plateforme> plateformes = new ArrayList<>(); //TODO: trouver data structure adaptée
+    private ArrayList<Plateforme> plateformes = new ArrayList<>();
     private ArrayList<ArrayList<Bulle>> bulles;
+    private int num = 0;
 
     public Jeu(Controleur controleur) {
         Jeu.debut = false;
@@ -35,16 +37,40 @@ public class Jeu {
 
         meduse = new Meduse();
 
-        //TODO: proba
-        // tests
+        plateformes.add(new Plateforme(-1)); // plateforme de début
+
+        // génère 5 plateformes qui apparaissent sur l'écran
         for (int i = 0; i < 5; i++) {
-            plateformes.add(new PlateformeSimple(i * 4));
-            plateformes.add(new PlateformeRebondissante(i * 4 + 1));
-            plateformes.add(new PlateformeAccelerante(i * 4 + 2));
-            plateformes.add(new PlateformeSimple(i * 4 + 3));
+            genererPlateformes();
         }
 
         genererBulles();
+    }
+
+    public void genererPlateformes() {
+        if (-fenetreY + HighSeaTower.HEIGHT < num * 100) return;
+
+        double random = Math.random();
+
+        // évite 2 plateformes solides d'affilée
+        if (plateformes.get(plateformes.size() - 1) instanceof PlateformeSolide) {
+            plateformes.add(new Plateforme(num++)); //TODO: possibilité autres plateformes
+            return;
+        }
+
+        if (random < 0.65) {
+            plateformes.add(new Plateforme(num++));
+        } else if (random < 0.85) {
+            plateformes.add(new PlateformeRebondissante(num++));
+        } else if (random < 0.95) {
+            plateformes.add(new PlateformeAccelerante(num++));
+        } else {
+            plateformes.add(new PlateformeSolide(num++));
+        }
+
+        if (plateformes.size() > 6) {
+            plateformes.remove(0); // enleve la plateforme qui n'est plus affichée
+        }
     }
 
     public void genererBulles() {
@@ -65,19 +91,17 @@ public class Jeu {
     }
 
     public void left() {
+        if (!debut) debut = true;
         meduse.left();
     }
 
     public void right() {
+        if (!debut) debut = true;
         meduse.right();
     }
 
     public void endAcc() {
         meduse.endAcc();
-    }
-
-    public void endVit() {
-        meduse.endVit();
     }
 
     public void switchDebug() {
@@ -87,11 +111,13 @@ public class Jeu {
 
     public void update(double dt) {
 
+        genererPlateformes();
+
         if (!debugMode && debut) {
             vitesse += dt * acceleration;
 
             // si la méduse se trouve sur une plateforme accélérante
-            if (vitesseAcceleree & meduse.getParterre()) {
+            if (vitesseAcceleree && meduse.isParterre()) {
                 fenetreY -= vitesse * dt * 3;
 
             // sinon, c'est qu'elle a quitté ou n'est pas sur la plateforme
@@ -102,7 +128,10 @@ public class Jeu {
         }
 
 
-        if (debut) meduse.update(dt);
+        if (debut) {
+            meduse.setParterre(false);
+            meduse.update(dt);
+        }
 
         // dépasse les 75%
         if (meduse.getPosY() - fenetreY < HighSeaTower.HEIGHT * 0.25) {
@@ -113,9 +142,6 @@ public class Jeu {
             controleur.nvPartie();
         }
 
-        if (fenetreY != 0) {
-            meduse.setParterre(false);
-        }
 
         for (Plateforme pf : plateformes) {
             pf.update(dt);
@@ -144,6 +170,7 @@ public class Jeu {
 
         for (Plateforme pf : plateformes) {
             pf.draw(context, fenetreX, fenetreY);
+            pf.setContactMeduse(false);
         }
 
         for (ArrayList<Bulle> grpBulles : bulles) {
@@ -158,10 +185,14 @@ public class Jeu {
             context.fillText("Position = (" + (int) meduse.getPosX() + ", " + (int) (-meduse.getPosY() + HighSeaTower.HEIGHT) + ")", 5, 20);
             context.fillText("v = (" + (int) meduse.getVx() + ", " + (int) meduse.getVy() + ")", 5, 30);
             context.fillText("a = (" + (int) meduse.getAx() + ", " + (int) meduse.getAy() + ")", 5, 40);
+            context.fillText("Touche le sol : " + (meduse.isParterre() ? "oui" : "non"),5, 50);
         }
 
-        // TODO: afficher le score en gros
-        //context.setFont(new Font(context.getFont().getName(), 100));
+        Font before = context.getFont();
+        context.setFont(new Font(25));
+        context.setTextAlign(TextAlignment.CENTER);
         context.fillText((int) -fenetreY + "m", (double) HighSeaTower.WIDTH / 2, 50);
+        context.setTextAlign(TextAlignment.LEFT);
+        context.setFont(before);
     }
 }

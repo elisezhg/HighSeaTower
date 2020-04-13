@@ -57,23 +57,16 @@ public class Meduse extends Entity {
 
     public void left() {
         this.gauche = true;
-        ax = -1000;
+        ax = -1200;
     }
 
     public void right() {
         this.gauche = false;
-        ax = 1000;
+        ax = 1200;
     }
 
-    // TODO : acc bizarre
     public void endAcc() {
         ax = 0;
-        //vx = 0;
-    }
-
-    // TODO : vitesse bizarre
-    public void endVit() {
-        //vx = 0;
     }
 
     public void jump() {
@@ -82,34 +75,43 @@ public class Meduse extends Entity {
         }
     }
 
-
-    /**
-     * @param other la plateforme
-     */
     public void testCollision(Plateforme other) {
+        /**
+         * La collision avec une plateforme a lieu seulement si :
+         *
+         * - Il y a une intersection entre la plateforme et le personnage
+         *
+         * - La collision a lieu entre la plateforme et le *bas du personnage*
+         * seulement
+         *
+         * - La vitesse va vers le bas (le personnage est en train de tomber,
+         * pas en train de sauter)
+         */
         if (intersects(other) && other instanceof PlateformeSolide) {
             pushOut(other);
-            this.vy = 0;
+            if (vy > 0) {this.vy = 0;} else {this.vy *= -1;}
             this.parterre = true;
+            other.setContactMeduse(true);
 
         } else if (intersects(other) && Math.abs(this.posY + hauteur - other.posY) < 10 && vy > 0) {
 
             pushOut(other);
 
-            if (other instanceof PlateformeSimple) {
-                this.vy = 0;
-
-            } else if (other instanceof PlateformeRebondissante) {
+            if (other instanceof PlateformeRebondissante) {
                 this.vy *= -1.5;
                 if (vy > -100) {
                     vy = -100;
                 }
+
             } else if (other instanceof PlateformeAccelerante) {
                 this.vy = 0;
                 Jeu.vitesseAcceleree = true;
+            } else {
+                this.vy = 0;
             }
 
             this.parterre = true;
+            other.setContactMeduse(true);
         }
     }
 
@@ -121,7 +123,7 @@ public class Meduse extends Entity {
     }
 
     /**
-     * Repousse le personnage vers toutes les directions (sans déplacer la
+     * Repousse le personnage dans la direction adaptée (sans déplacer la
      * plateforme)
      */
     public void pushOut(Plateforme other) {
@@ -149,7 +151,7 @@ public class Meduse extends Entity {
         this.parterre = parterre;
     }
 
-    public boolean getParterre() {
+    public boolean isParterre() {
         return this.parterre;
     }
 

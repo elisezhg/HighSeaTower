@@ -31,10 +31,6 @@ public class Controleur {
         jeu.endAcc();
     }
 
-    void endVit() {
-        jeu.endVit();
-    }
-
     void switchDebug() {
         jeu.switchDebug();
     }

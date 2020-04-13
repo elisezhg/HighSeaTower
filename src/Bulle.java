@@ -9,7 +9,7 @@ public class Bulle extends Entity {
         this.hauteur = this.largeur;
         this.vy = -(Math.random() * 100 + 350); // entre 350 et 450px/s vers le haut
         this.posX = baseX + Math.random() * 40 - 20;    // position random dans [baseX - 20; baseX + 20]
-        this.posY = - fenetreY + HighSeaTower.HEIGHT;
+        this.posY = - fenetreY + HighSeaTower.HEIGHT;  // positionné juste en bas de l'écran
     }
 
     public void update(double dt) {

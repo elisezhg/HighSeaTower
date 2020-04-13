@@ -21,17 +21,13 @@ public abstract class Entity {
         posX += dt * vx;
         posY += dt * vy;
 
+        // friction
+        vx *= 0.95;
+
         // Force à rester dans les bornes de l'écran
         if (posX + largeur > HighSeaTower.WIDTH || posX < 0) {
-            vx *= -0.6;
+            vx *= -1;
         }
-        if (posY + hauteur > HighSeaTower.HEIGHT || posY < 0) {
-            //vy *= -0.8;
-        }
-        posX = Math.min(posX, HighSeaTower.WIDTH - largeur);
-        posX = Math.max(posX, 0);
-        posY = Math.min(posY, HighSeaTower.HEIGHT - hauteur);
-        //posY = Math.max(posY, 0);
     }
 
     public abstract void draw(GraphicsContext context, double fenetreX, double fenetreY);
