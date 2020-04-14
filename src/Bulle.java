@@ -3,6 +3,10 @@ import javafx.scene.paint.Color;
 
 public class Bulle extends Entity {
 
+     /**
+     * @param baseX est la position originale de x 
+     * @param fenetreY est l'origine en l'axe y de la fenêtre
+     */
     public Bulle(double baseX, double fenetreY) {
         this.color = Color.rgb(0, 0, 255, 0.4);
         this.largeur = Math.random() * 30 + 10;   // entre 10 et 40px
