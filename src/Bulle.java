@@ -18,12 +18,20 @@ public class Bulle extends Entity {
         System.out.println(posY);
     }
 
+     /**
+     * @param dt Temps écoulé depuis le dernier update() en secondes
+     */
     public void update(double dt) {
         super.update(dt);
     }
 
 
-    public void draw(GraphicsContext context, double fenetreX, double fenetreY) {
+     /**
+     * @param context le context à dessiner
+     * @param fenetreX la taille de la fenêtre
+     * @param fenetreY la taille de la fenêtre
+     */
+     public void draw(GraphicsContext context, double fenetreX, double fenetreY) {
 
         double xAffiche = posX - fenetreX;
         double yAffiche = posY - fenetreY;
