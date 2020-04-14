@@ -28,7 +28,7 @@ public class Jeu {
     private Meduse meduse;
     private ArrayList<Plateforme> plateformes = new ArrayList<>();
     private ArrayList<ArrayList<Bulle>> bulles;
-    private int num = 0;
+    private int num = 2;
 
     public Jeu(Controleur controleur) {
         Jeu.debut = false;
@@ -38,7 +38,8 @@ public class Jeu {
         meduse = new Meduse();
 
         plateformes.add(new Plateforme(-1)); // plateforme de début
-
+        plateformes.add(new Plateforme(0));
+        plateformes.add(new PlateformeSolide(1));
         // génère 5 plateformes qui apparaissent sur l'écran
         for (int i = 0; i < 5; i++) {
             genererPlateformes();
@@ -54,7 +55,7 @@ public class Jeu {
 
         // évite 2 plateformes solides d'affilée
         if (plateformes.get(plateformes.size() - 1) instanceof PlateformeSolide) {
-            plateformes.add(new Plateforme(num++)); //TODO: possibilité autres plateformes
+            plateformes.add(new Plateforme(num++));
             return;
         }
 
@@ -145,7 +146,7 @@ public class Jeu {
 
         for (Plateforme pf : plateformes) {
             pf.update(dt);
-            meduse.testCollision(pf);
+            pf.testCollision(meduse);
         }
 
         if (debut) {

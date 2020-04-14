@@ -25,8 +25,8 @@ public class Meduse extends Entity {
 
     private Image img = framesD[0];
     private boolean gauche = false ;
-    double frameRate = 8;
-    double tempsTotal = 0;
+    private double frameRate = 8;
+    private double tempsTotal = 0;
 
     private boolean parterre = true;
 
@@ -73,78 +73,6 @@ public class Meduse extends Entity {
         if (parterre) {
             vy = -600;  //vitesse instantanée de 600px/s vers le haut
         }
-    }
-
-    public void testCollision(Plateforme other) {
-        /**
-         * La collision avec une plateforme a lieu seulement si :
-         *
-         * - Il y a une intersection entre la plateforme et le personnage
-         *
-         * - La collision a lieu entre la plateforme et le *bas du personnage*
-         * seulement
-         *
-         * - La vitesse va vers le bas (le personnage est en train de tomber,
-         * pas en train de sauter)
-         */
-        if (intersects(other) && other instanceof PlateformeSolide) {
-            pushOut(other);
-            if (vy > 0) {this.vy = 0;} else {this.vy *= -1;}
-            this.parterre = true;
-            other.setContactMeduse(true);
-
-        } else if (intersects(other) && Math.abs(this.posY + hauteur - other.posY) < 10 && vy > 0) {
-
-            pushOut(other);
-
-            if (other instanceof PlateformeRebondissante) {
-                this.vy *= -1.5;
-                if (vy > -100) {
-                    vy = -100;
-                }
-
-            } else if (other instanceof PlateformeAccelerante) {
-                this.vy = 0;
-                Jeu.vitesseAcceleree = true;
-            } else {
-                this.vy = 0;
-            }
-
-            this.parterre = true;
-            other.setContactMeduse(true);
-        }
-    }
-
-    public boolean intersects(Plateforme other) {
-        return !( // Un des carrés est à gauche de l’autre
-                posX + largeur < other.posX || other.posX + other.largeur < this.posX
-                 // Un des carrés est en haut de l’autre
-                || posY + hauteur < other.posY || other.posY + other.hauteur < this.posY);
-    }
-
-    /**
-     * Repousse le personnage dans la direction adaptée (sans déplacer la
-     * plateforme)
-     */
-    public void pushOut(Plateforme other) {
-
-        double deltaY ;
-        double deltaX ;
-        if (other instanceof PlateformeSolide) {
-            // TODO: pushOut dans toutes les directions pour plateformes solides
-            deltaX = posX - Math.max(
-                    other.getPosX() - other.largeur / 2,
-                    Math.min(posX, other.getPosX() + other.largeur / 2));
-            deltaY = posY - Math.max(
-                    other.getPosY() - other.hauteur / 2,
-                    Math.min(posY, other.getPosY() + other.largeur / 2));
-        } else {
-            deltaY = this.posY + this.hauteur - other.posY;
-            deltaX = 0;
-        }
-
-        this.posY -= deltaY;
-        this.posX -= deltaX;
     }
 
     public void setParterre(boolean parterre) {

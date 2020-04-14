@@ -3,7 +3,7 @@ import javafx.scene.paint.Color;
 
 public class Plateforme extends Entity{
 
-    private boolean contactMeduse = false;
+    protected boolean contactMeduse = false;
 
     public Plateforme(int i) {
         this.color = Color.rgb(230, 134, 58);
@@ -19,6 +19,29 @@ public class Plateforme extends Entity{
         }
     }
 
+    public void testCollision(Meduse other) {
+        if (intersects(other) && Math.abs(other.posY + other.hauteur - posY) < 10 && other.vy > 0) {
+            pushOut(other);
+            other.vy = 0;
+            other.setParterre(true);
+            this.contactMeduse = true;
+        }
+    }
+
+    public boolean intersects(Meduse other) {
+        return !( // Un des carrés est à gauche de l’autre
+                other.posX + other.largeur < posX || posX + largeur < other.posX
+                        // Un des carrés est en haut de l’autre
+                        || other.posY + other.hauteur < posY || posY + hauteur < other.posY);
+    }
+
+    /**
+     * Repousse le personnage vers le haut (sans déplacer la
+     * plateforme)
+     */
+    public void pushOut(Meduse other) {
+        other.posY = this.posY - other.hauteur;
+    }
 
     public boolean isContactMeduse() {
         return contactMeduse;
