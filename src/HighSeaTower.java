@@ -1,3 +1,5 @@
+//Elise ZHENG (20148416), Yuyin DING (20125263)
+
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -5,13 +7,17 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-
+/**
+ * Représente la vue du jeu High Sea Tower
+ */
 public class HighSeaTower extends Application {
 
+    // Variables globales : hauteur et largeur
     public static int WIDTH = 350, HEIGHT = 480;
 
     public static void main(String[] args){
@@ -28,13 +34,14 @@ public class HighSeaTower extends Application {
 
         Controleur controleur = new Controleur();
 
+        // Détecte les touches appuyées
         scene.setOnKeyPressed((e) -> {
             switch (e.getCode()) {
                 case ESCAPE:
                     Platform.exit();
-                case SPACE:
                 case UP:
-                    controleur.jump();
+                case SPACE:
+                    controleur.up();
                     break;
                 case LEFT:
                     controleur.left();
@@ -47,20 +54,27 @@ public class HighSeaTower extends Application {
                     break;
                 case R:
                     controleur.nvPartie();
+                    break;
+                case ENTER:
+                case M:
+                    controleur.switchMenu();
+                    break;
+                case DOWN:
+                    controleur.down();
+                    break;
             }
         });
 
+        // Détecte les touches relâchées
         scene.setOnKeyReleased((e) -> {
-            switch (e.getCode()) {
-                case LEFT:
-                case RIGHT:
-                    controleur.endAcc();
-                    break;
+            if (e.getCode() == KeyCode.LEFT || e.getCode() == KeyCode.RIGHT) {
+                controleur.endAx();
             }
         });
 
         GraphicsContext context = canvas.getGraphicsContext2D();
 
+        // Crée l'animation du jeu
         AnimationTimer timer = new AnimationTimer() {
             private long lastTime = 0;
 
@@ -73,10 +87,11 @@ public class HighSeaTower extends Application {
 
                 double dt = (now - lastTime) * 1e-9;
 
-                context.clearRect(0, 0, WIDTH, HEIGHT);
+                // Reset le canvas en dessinant le background
                 context.setFill(Color.rgb(0, 8, 144));
                 context.fillRect(0, 0, WIDTH, HEIGHT);
 
+                // Met à jour le jeu et dessine
                 controleur.update(dt);
                 controleur.draw(context);
 
@@ -86,7 +101,7 @@ public class HighSeaTower extends Application {
 
         timer.start();
 
-
+        // Stage
         primaryStage.setResizable(false);
         primaryStage.getIcons().add(new Image("res/jellyfish1.png"));
         primaryStage.setTitle("High Sea Tower");

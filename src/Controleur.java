@@ -1,42 +1,61 @@
+//Elise ZHENG (20148416), Yuyin DING (20125263)
+
 import javafx.scene.canvas.GraphicsContext;
 
+/**
+ * Représente le controleur du jeu, gère les intéractions entre l'affichage et la logique
+ */
 public class Controleur {
+
     private Jeu jeu;
 
+    /**
+     * Constructeur du controleur
+     */
     public Controleur() {
         this.jeu = new Jeu(this);
     }
 
-    void draw(GraphicsContext context) {
+
+    // Manipulations et mise à jour du jeu
+
+    public void draw(GraphicsContext context) {
         jeu.draw(context);
     }
 
-    void update(double deltaTime) {
+    public void update(double deltaTime) {
         jeu.update(deltaTime);
     }
 
-    void jump() {
-        jeu.jump();
+    public void up() {
+        jeu.up();
     }
 
-    void left() {
+    public void left() {
         jeu.left();
     }
 
-    void right() {
+    public void right() {
         jeu.right();
     }
 
-    void endAcc() {
-        jeu.endAcc();
+    public void down() {
+        jeu.down();
     }
 
-    void switchDebug() {
+    public void endAx() {
+        jeu.endAx();
+    }
+
+    public void switchDebug() {
         jeu.switchDebug();
     }
 
-    void nvPartie() {
+    public void nvPartie() {
         this.jeu = new Jeu(this);
     }
 
+    public void switchMenu() {
+        jeu.switchMenu();
+    }
 }

@@ -1,0 +1,36 @@
+// Elise ZHENG (20148416), Yuyin DING (20125263)
+
+Voici les fonctionnalités qui ont été ajoutées en plus de la spécification.
+
+La première fonctionnalité est la possibilité de choisir parmi 3 niveaux de difficultés:
+- Facile : sans les plateformes solides et accélérantes, on a juste eu à changer les probabilités d'apparition.
+- Normal : ce mode correspond aux spécifications de base.
+- Difficile : les plateformes bougent aussi! On a donné une vitesse horizontale entre -200 et 200px/s à chaque
+plateforme. Lorsque la méduse est sur la plateforme, elle est aussi déplacée.
+Donc au lieu d'avoir le boolean parterre dans la classe Meduse, on l'a changé en Plateforme pfTouchee ce qui permet
+d'accéder à la vitesse de la plateforme sur laquelle se trouve la méduse, et donc de déplacer la méduse avec la
+plateforme.
+
+Quand on lance le jeu, une sorte de menu s'affiche et nous permet de choisir le niveau de difficulté avec les flèches du
+haut/bas. Un flou est appliqué sur le jeu ce qui fait ressortir le menu. On peut ensuite fermer le menu en appuyant sur
+M ou entrée. On peut rechanger de mode plus tard en début de partie en appuyant sur M ou entrée.
+
+On a aussi ajouté des items que la méduse peut récupérer:
+- Sac plastique: lorsque la méduse entre en collision avec le sac qui a été jeté danas l'océan, sa vitesse vers le haut
+est réduite à 500px/s max pendant 1 seconde. Pour que cela soit apparent pour le joueur, un filtre de flou est appliqué
+sur la méduse.
+- Poisson : la méduse recoit un boost et effectue un supersaut. Le supersaut est en fait une vitesse de 800px/s vers
+le haut pendant 0.5seconde. Durant ce saut, la méduse devient rouge. Le boost n'est pas présent dans le mode difficile.
+
+Les items sont placés aléatoirement sur une plateforme et bougent aussi lorsque la plateforme bouge.
+
+On garde aussi le meilleur score dans une variable globale et on l'affiche en bas de l'écran, et si on dépasse notre
+meilleur score, le score actuel sera affiché en rouge à la place de l'ancien meilleur score.
+
+D'autres petites fonctionnalités ont été ajoutées comme la possibilité de recommencer la partie en appuyant sur R,
+l'affichage du niveau de difficulté actuel et une mention s'il est possible d'ouvrir le menu.
+
+
+Sources:
+- Sac plastique : https://thenounproject.com/term/plastic-bag/260635/
+- Poisson : https://game-icons.net/1x1/darkzaitzev/fried-fish.html
